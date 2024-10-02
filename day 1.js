@@ -1,4 +1,4 @@
-function findTheSecretcodes(data) {
+function part1(data) {
   const output = [];
   for (let i = 0; i < data.length; i++) {
     const elementArr = data[i].split('');
@@ -12,7 +12,43 @@ function findTheSecretcodes(data) {
     }
     output.push(numArr.join(''));
   }
-  console.log(output.join(', '));
+  console.log(output.reduce((a, c) => a + Number(c), 0));
+}
+
+function part2(data) {
+  const cypherKeys = [];
+  const output = [];
+  for (let i = 0; i < data.length; i++) {
+    let cypher = data[i];
+    const charTodigitMap = {
+      one: 'one1one',
+      two: 'two2two',
+      three: 'three3three',
+      four: 'four4four',
+      five: 'five5five',
+      six: 'six6six',
+      seven: 'seven7seven',
+      eight: 'eight8eight',
+      nine: 'nine9nine'
+    };
+    let flag = false;
+    for (const key in charTodigitMap) {
+      cypher = cypher.replaceAll(key, charTodigitMap[key]);
+      if (data[i].includes(key)) flag = true;
+    }
+    if (flag) cypherKeys.push([data[i], cypher]);
+
+    const elementArr = cypher.split('');
+    const numArr = [null, null];
+    for (let j = 0; j < elementArr.length; j++) {
+      const element = elementArr[j];
+      const lastElement = elementArr[elementArr.length - (j + 1)];
+      if (!isNaN(element) && !numArr[0]) numArr[0] = element;
+      if (!isNaN(lastElement) && !numArr[1]) numArr[1] = lastElement;
+      if (numArr[0] && numArr[1]) break;
+    }
+    output.push(numArr.join(''));
+  }
   console.log(output.reduce((a, c) => a + Number(c), 0));
 }
 
@@ -1019,4 +1055,5 @@ const data = [
   'sevenbsixsbzmone55'
 ];
 
-findTheSecretcodes(data);
+part1(data);
+part2(data);

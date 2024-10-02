@@ -1,7 +1,7 @@
 const fsp = require('fs/promises');
 
 (async () => {
-  const readFile = await fsp.readFile('./ex03.txt', { encoding: 'utf-8' });
+  const readFile = await fsp.readFile('./day 2.txt', { encoding: 'utf-8' });
 
   /**
      'Game 1': [
@@ -18,16 +18,6 @@ const fsp = require('fs/promises');
     return acc;
   }, {});
 
-  //  'Game 1': { green: 17, red: 40, blue: 14 }, //! Data format
-  const gameData1 = {};
-  for (const key in games) {
-    const element = games[key];
-    gameData1[key] = element.flat().reduce((acc, cv) => {
-      acc[cv[1]] = (acc[cv[1]] ?? 0) + Number(cv[0]);
-      return acc;
-    }, {});
-  }
-
   /** //! Data format
 'Game 1': [
         { green: 7, red: 14, blue: 5 },
@@ -36,10 +26,10 @@ const fsp = require('fs/promises');
     ],
    */
 
-  const gameData2 = {};
+  const gameData = {};
   for (const key in games) {
     const element = games[key];
-    gameData2[key] = element.reduce((acc, cv, i) => {
+    gameData[key] = element.reduce((acc, cv, i) => {
       acc[i] = cv.reduce((a, c) => {
         a[c[1]] = (a[c[1]] ?? 0) + Number(c[0]);
         return a;
@@ -47,10 +37,11 @@ const fsp = require('fs/promises');
       return acc;
     }, []);
   }
-  possiblegames1(gameData2);
+  part1(gameData);
+  part2(gameData);
 })();
 
-function possiblegames1(data) {
+function part1(data) {
   const parameter = { red: 12, green: 13, blue: 14 };
   const passedGames = [];
   for (const key in data) {
@@ -65,4 +56,20 @@ function possiblegames1(data) {
     if (testPassed) passedGames.push(key.split(' ')[1]);
   }
   console.log(passedGames.reduce((a, c) => a + Number(c), 0));
+}
+
+function part2(data) {
+  const minimumQty = [];
+  for (const key in data) {
+    const minqty = { red: 0, blue: 0, green: 0 };
+    const element = data[key];
+    for (let i = 0; i < element.length; ++i) {
+      const obj = element[i];
+      for (const key in obj) {
+        if (obj[key] > minqty[key]) minqty[key] = obj[key];
+      }
+    }
+    minimumQty.push(Object.values(minqty).reduce((a, c) => a * c));
+  }
+  console.log(minimumQty.reduce((a, c) => a + Number(c)));
 }
