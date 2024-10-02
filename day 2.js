@@ -69,7 +69,7 @@ function part2(data) {
         if (obj[key] > minqty[key]) minqty[key] = obj[key];
       }
     }
-    minimumQty.push(Object.values(minqty).reduce((a, c) => a * c));
+    minimumQty.push(Object.values(minqty).reduce((a, c) => a * c, 1));
   }
-  console.log(minimumQty.reduce((a, c) => a + Number(c)));
+  console.log(minimumQty.reduce((a, c) => a + c, 0));
 }
